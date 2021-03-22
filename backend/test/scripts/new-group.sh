@@ -1,0 +1,1 @@
+curl http://localhost/index.php\?action\=new-group -d "{\"gid\":\"$1\",\"members\":[$2]}"

@@ -1,0 +1,1 @@
+curl http://localhost/index.php\?action\=get-groups -d "{\"user\":\"$1\"}"

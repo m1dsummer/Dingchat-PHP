@@ -1,0 +1,1 @@
+curl http://localhost/index.php\?action\=register -d "{\"username\":\"$1\",\"password\":\"$2\"}"

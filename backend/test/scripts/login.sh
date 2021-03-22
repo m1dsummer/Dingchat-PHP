@@ -1,0 +1,1 @@
+curl http://localhost/index.php\?action\=login -d "{\"username\":\"$1\",\"password\":\"$2\"}"
