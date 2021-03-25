@@ -1,95 +1,100 @@
 <template>
-  <div class="container">
-    <div id="nav" class="row">
-      <div class="col-lg-8">
-        <router-link to="/" id="title">
-          <h1>Summer's chatroom</h1>
-        </router-link>
-      </div>
-      <div class="row col-lg-4 align-center"
-           v-if="curUser==''"
-      >
-        <div class="col-lg-6">
-          <router-link to="/user/login" type="button" class="btn btn-info">login</router-link>
+  <div id="chatroom">
+    <new-group
+      :curuser="userinfo.username"
+      v-on:close="showDialog=false"
+      v-on:succeed="getGroups"
+      v-show="showDialog"
+    ></new-group>
+    <header>
+      <div></div>
+      <div></div>
+    </header>
+    <main>
+      <div id="menu">
+        <div>
+          <menu-item :src="`/assets/avatar/${this.userinfo.avatar}`" :width="`3em`"></menu-item>
         </div>
-        <div class="col-lg-6">
-          <router-link to="/user/register" type="button" class="btn btn-primary">register</router-link>
+        <div>
+          <menu-item :src="`/assets/message.png`" :width="`2em`"></menu-item>
         </div>
-      </div>
-      <div class="row col-lg-4 align-center"
-           v-else
-      >
-        <div class="col-lg-2">
-          <p>{{curUser}}</p>
-        </div>
-        <div class="col-lg-5">
-          <router-link to="/new-group" type="button" class="btn btn-primary">new room</router-link>
-        </div>
-        <div class="col-lg-5">
-          <button @click="logout" class="btn btn-danger">logout</button>
+        <div @click="showDialog=true">
+          <menu-item :src="`/assets/add.png`" :width="`2em`"></menu-item>
         </div>
       </div>
-    </div>
-    <div id="chatroom" class="row">
-      <div class="row">
-        <div class="col-lg-2">
-          <ul>
-            <li v-for="(group,index) in groups" 
-                :key="`chatroom-${index}`"
-                :groupId="group"
-                @click="changeGroup"
-            >{{group}}</li>
-          </ul>
+      <div id="groups">
+        <item-box
+          v-for="(group,index) in groups"
+          :key="`group-${index}`"
+          :name="group.gid"
+          :icon="group.icon"
+          :gid="group.gid"
+          v-on:changeGroup="changeGroup"
+        >{{group}}</item-box>
+      </div>
+      <div id="window">
+        <div id="msg-list">
+          <message-box
+            v-for="(msg, index) in messageList"
+            :key="`msg-${index}`"
+            :icon="`/assets/avatar/${msg.avatar}`"
+            :name="msg.sender"
+            :content="msg.content"
+            :self="msg.sender==userinfo.username"
+          ></message-box>
         </div>
-        <div class="col-lg-10">
-          <ul>
-            <li v-for="(item,index) in records" :key="`record-${index}`">{{item}}</li>
-          </ul>
+        <div id="input-area">
+          <textarea v-model="message"></textarea>
+          <button @click="postMessage">send</button>
         </div>
       </div>
-      <div v-show="curUser" class="row">
-        <textarea v-model="message" type="text" class="col-lg-10"></textarea>
-        <button @click="postMessage" class="col-lg-2 btn btn-primary">发送</button>
-      </div>
-    </div>
+    </main>
   </div>
 </template>
 
 <script>
 import axios from "axios"
+import MenuItem from "@/components/MenuItem.vue"
+import ItemBox from "@/components/ItemBox.vue"
+import NewGroup from "@/components/NewGroup.vue"
+import MessageBox from "@/components/MessageBox"
 
 export default {
   name: "Home",
+  components: {
+    ItemBox,
+    MenuItem,
+    NewGroup,
+    MessageBox,
+  },
   data() {
     return {
-      curUser: "",
-      curGroup: "",
+      userinfo:{
+        username: "",
+        avatar: "1.png"
+      },
+      groups: {},
+      messageList: [],
       message: "",
-      groups: [],
-      records: []
+      showDialog: false
     }
   },
   methods: {
-    async changeGroup(e) {
-      const gid = e.target.getAttribute("groupId")
-      if (gid != this.curGroup) {
-        console.log(gid)
-        this.curGroup = gid
-        this.getMsgRecord()
-      }
-    },
     async getGroups() {
-      const res = await axios.post("/index.php?action=get-groups", {user:this.curUser})
+      const res = await axios.post("/index.php?action=get-groups", {user:this.userinfo.username})
       if (res.data.code == 0) {
         this.groups = res.data.data
-        this.curGroup = this.groups[0]
+        this.curGroup = this.groups[0].gid
       }
+    },
+    async changeGroup(gid) {
+      this.curGroup = gid
+      this.getMsgRecord()
     },
     async getMsgRecord() {
       const res = await axios.post("/index.php?action=get-records", {gid:this.curGroup})
-      console.log(res.data)
       if (res.data.code == 0) {
-        this.records = res.data.data
+        this.messageList = res.data.data
       }
     },
     async logout() {
@@ -98,7 +103,7 @@ export default {
     },
     async postMessage() {
       const data = {
-        sender: this.curUser,
+        sender: this.userinfo.username,
         content: this.message,
         gid: this.curGroup
       }
@@ -111,17 +116,78 @@ export default {
       }
     },
   },
-  mounted() {
-    axios.get("/index.php?action=get-status").then(async res => {
-      if (res.data.code == 0) {
-        this.curUser = res.data.data.username
-        await this.getGroups()
-        this.getMsgRecord()
-      }
-    })
+  async mounted() {
+    const res = await axios.get("/index.php?action=get-status")
+    if (res.data.code != 0) {
+      alert(res.data.msg)
+      this.$router.push("/login")
+    }
+    for (const key in res.data.data) {
+      this.$set(this.userinfo, key, res.data.data[key])
+    }
+    this.getGroups()
   }
 }
 </script>
 
 <style scoped>
+#chatroom {
+  height: 600px;
+  width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  flex-basis: 12.5%;
+  flex-shrink: 0;
+  background-color: #3d63f3;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+main {
+  flex-basis: 87.5%;
+  display: flex;
+}
+.main > * {
+  height: 100%;
+}
+#menu, .menu-item {
+  display: flex;
+  flex-direction: column;
+  background-color: #e5e8f5;
+}
+#menu {
+  flex-basis: 10%;
+}
+#groups {
+  flex-basis: 30%;
+  background-color: #f8faff;
+  border-right: 1px solid #aaa;
+}
+#window {
+  flex-basis: 70%;
+  background-color: #f8faff;
+  position: relative;
+}
+#msg-list {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 90%;
+  max-height: 90%;
+  overflow-y: scroll;
+}
+#input-area {
+  height: 10%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background: #333;
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+}
 </style>

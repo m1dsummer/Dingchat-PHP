@@ -9,15 +9,11 @@ const routes = [
     name: 'Home',
     component: () => import("../views/Home.vue")
   }, {
-    path: '/user/:page',
+    path: '/login',
     name: 'Login',
-    component: () => import('../views/User.vue')
-  }, {
-    path: "/new-group",
-    name: "NewGroup",
-    component: () => import("../views/NewGroup.vue")
-  }
-
+    alias: "/register",
+    component: () => import('../views/Login.vue')
+  },
 ]
 
 const router = new VueRouter({

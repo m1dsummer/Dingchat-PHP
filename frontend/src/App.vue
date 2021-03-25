@@ -1,26 +1,35 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  data() {
+    return {
+      userInfo: {
+        name: "Summer",
+        avatar: ""
+      },
+    }
+  }
 }
 </script>
 
 <style>
-html,body,#app {
+html, body, #chatroom {
+  margin: 0;
+  padding: 0;
   height: 100%;
   overflow: hidden;
 }
-#nav {
-  padding: 1em 2em 0;
+html {
+  background: url("/assets/background.jpg");
 }
-#title {
-  text-decoration: none;
-  color: inherit;
-}
-#chatroom {
-  height: auto;
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, .6);
 }
 </style>
