@@ -7,7 +7,7 @@
       v-show="showDialog"
     ></new-group>
     <header>
-      <div></div>
+      <div><h1>SummerChat</h1></div>
       <div></div>
     </header>
     <main>
@@ -29,6 +29,7 @@
           :name="group.name"
           :icon="group.icon"
           :gid="group.gid"
+          :class="{'cur-group':curGroup==group.name}"
           v-on:changeGroup="changeGroup"
         >{{group}}</item-box>
       </div>
@@ -147,13 +148,21 @@ header {
   background-color: #3d63f3;
   display: grid;
   grid-template-columns: 2fr 1fr;
+  align-items: center;
+}
+header  h1 {
+  padding-left: 1em;
+  color: rgba(255,255,255,.8);
+  font-size: xx-large;
 }
 main {
   flex-basis: 87.5%;
-  display: flex;
+  flex-grow: 0;
+  position: relative;
 }
-.main > * {
+main > * {
   height: 100%;
+  position: absolute;
 }
 #menu, .menu-item {
   display: flex;
@@ -161,15 +170,18 @@ main {
   background-color: #e5e8f5;
 }
 #menu {
-  flex-basis: 10%;
+  width: 8%;
 }
 #groups {
-  flex-basis: 30%;
+  width: 22%;
+  left: 8%;
   background-color: #f8faff;
   border-right: 1px solid #aaa;
+  overflow-y: scroll;
 }
 #window {
-  flex-basis: 70%;
+  width: 70%;
+  left: 30%;
   background-color: #f8faff;
   position: relative;
 }
@@ -177,17 +189,31 @@ main {
   position: absolute;
   top: 0;
   width: 100%;
-  height: 90%;
+  height: 80%;
   max-height: 90%;
   overflow-y: scroll;
 }
 #input-area {
-  height: 10%;
+  height: 20%;
   width: 100%;
   position: absolute;
   bottom: 0;
   background: #333;
   display: grid;
   grid-template-columns: 8fr 1fr;
+  border-top: 1px solid #aaa;
+}
+#input-area > textarea {
+  outline: none;
+  resize: none;
+  border: none;
+}
+#input-area > button {
+  color: #75c2ff;
+  background-color: #fff;
+  border: none;
+}
+.cur-group {
+  background-color: #D5EDFE;
 }
 </style>

@@ -1,24 +1,26 @@
 <template>
   <form class="container dialog">
+    <p>创建新聊天室</p>
     <div class="row form-line">
       <input v-model="gid" type="text" placeholder="Group name" class="form-control">
     </div>
-    <div class="row form-line">
-        <div 
-          class="row col-lg-6"
-          v-for="(user,index) in users"
-          :key="`user-${index}`"
+    <p>选择群聊成员（记得选择自己！）：</p>
+    <div class="row form-line users">
+      <div 
+        class="row col-lg-6"
+        v-for="(user,index) in users"
+        :key="`user-${index}`"
+      >
+        <input 
+          class="col-lg-1" type="checkbox"
+          :id="`user-${index}`"
+          :value="user.name"
+          v-model="selectedUsers"
         >
-          <input 
-            class="col-lg-1" type="checkbox"
-            :id="`user-${index}`"
-            :value="user.name"
-            v-model="selectedUsers"
-          >
-          <label class="col-lg-11" :for="`user-${index}`">
-            <item-box :icon="user.avatar" :name="user.name"></item-box>
-          </label>
-        </div>
+        <label class="col-lg-11" :for="`user-${index}`">
+          <item-box :icon="user.avatar" :name="user.name"></item-box>
+        </label>
+      </div>
     </div>
     <div class="row form-line">
       <button @click.prevent="newGroup" class="btn btn-success">create</button>
@@ -84,8 +86,8 @@ export default {
 .dialog {
   position: absolute;
   z-index: 1;
-  width: 50%;
-  background: #ccc;
+  width: 40%;
+  background: #eee;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -93,7 +95,11 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 3em 0;
+  padding: 2em 0;
+  border-radius: 14px;
+}
+.dialog > * {
+  margin: 5px 0;
 }
 .form-line {
   width: 80%;
@@ -101,5 +107,9 @@ export default {
 li {
   list-style: none;
   text-align: center;
+}
+.users {
+  max-height: 350px;
+  overflow-y: scroll;
 }
 </style>

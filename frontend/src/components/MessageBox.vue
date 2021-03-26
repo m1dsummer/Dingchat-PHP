@@ -29,6 +29,7 @@ export default {
 .avatar-wrapper {
   flex-basis: 8%;
   padding: .2em .5em .2em 1em;
+  cursor: pointer;
 }
 .avatar-wrapper > img {
   width: 2em;

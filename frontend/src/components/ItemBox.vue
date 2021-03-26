@@ -1,9 +1,9 @@
 <template>
   <div @click="clickHandler" class="container">
-    <div class="wrapper text">
+    <div class="wrapper img">
       <img :src="imgURL" alt="">
     </div>
-    <div class="wrapper">
+    <div class="wrapper text">
       <p>{{name}}</p>
     </div>
   </div>  
@@ -46,8 +46,8 @@ export default {
   border-bottom: 1px solid #aaa;
 }
 img {
-  width: 2em;
-  height: 2em;
+  width: 2.5em;
+  height: 2.5em;
 }
 p {
   margin: 0;
@@ -61,5 +61,13 @@ p {
 }
 .text {
   line-height: 2em;
+  padding-left: .8em;
+}
+img {
+  background: #fff;
+  border-radius: 50%;
+  padding: 10px;
+  box-sizing: padding-box;
+  cursor: pointer;
 }
 </style>

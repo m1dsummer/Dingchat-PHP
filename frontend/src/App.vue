@@ -26,6 +26,17 @@ html, body, #chatroom {
 html {
   background: url("/assets/background.jpg");
 }
+html:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0; 
+  bottom: 0;
+  z-index: -1;
+  background: url("/assets/background.jpg");
+  filter: blur(5px);
+}
 body {
   display: flex;
   flex-direction: column;
