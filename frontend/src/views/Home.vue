@@ -59,6 +59,7 @@ import MenuItem from "@/components/MenuItem.vue"
 import ItemBox from "@/components/ItemBox.vue"
 import NewGroup from "@/components/NewGroup.vue"
 import MessageBox from "@/components/MessageBox"
+import Player from "@/js/player"
 
 export default {
   name: "Home",
@@ -85,7 +86,7 @@ export default {
       const res = await axios.post("/index.php?action=get-groups", {user:this.userinfo.username})
       if (res.data.code == 0) {
         this.groups = res.data.data
-        this.curGroup = this.groups[0].name
+        this.curGroup = this.curGroup || this.groups[0].name
       }
     },
     async changeGroup(gid) {
@@ -95,6 +96,9 @@ export default {
     async getMsgRecord() {
       const res = await axios.post("/index.php?action=get-records", {gid:this.curGroup})
       if (res.data.code == 0) {
+        if (res.data.data.length != this.messageList.length) {
+          Player.play()
+        }
         this.messageList = res.data.data
       }
     },
@@ -116,6 +120,10 @@ export default {
         this.getMsgRecord()
       }
     },
+    async update() {
+      await this.getGroups()
+      this.getMsgRecord()
+    }
   },
   async mounted() {
     const res = await axios.get("/index.php?action=get-status")
@@ -126,7 +134,7 @@ export default {
     for (const key in res.data.data) {
       this.$set(this.userinfo, key, res.data.data[key])
     }
-    this.getGroups()
+    setInterval(this.update, 1000)
   }
 }
 </script>
