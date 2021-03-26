@@ -1,5 +1,6 @@
 docker/data
 docker/log
+backend/vendor
 
 .DS_Store
 node_modules

@@ -2,19 +2,22 @@ DROP database IF EXISTS `chatroom`;
 CREATE database chatroom;
 
 CREATE table chatroom.user (
+    uid int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name char(16) NOT NULL UNIQUE,
     password char(16) NOT NULL,
     avatar char(16) NOT NULL
 );
 
 CREATE table chatroom.records (
+    mid int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     sender char(16) NOT NULL,
-    gid char(16) NOT NULL,
+    group_name char(16) NOT NULL,
     content varchar(16) NOT NULL,
     time TIMESTAMP DEFAULT NOW()
 );
 
-CREATE table chatroom.groups (
+CREATE table chatroom.rooms (
+    rid int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name char(16) NOT NULL,
     member char(16) NOT NULL,
     icon char(16) NOT NULL
@@ -24,4 +27,4 @@ CREATE table chatroom.groups (
 INSERT INTO chatroom.user (name,password,avatar) VALUES ("Summer","ThisIsSummer","1.png");
 
 -- 创建默认聊天室
-INSERT INTO chatroom.goups (name,member,icon) VALUES ("Summer","Summer","1.png");
+INSERT INTO chatroom.rooms (name,member,icon) VALUES ("Summer","Summer","1.png");

@@ -12,11 +12,11 @@
           <input 
             class="col-lg-1" type="checkbox"
             :id="`user-${index}`"
-            :value="user.username"
+            :value="user.name"
             v-model="selectedUsers"
           >
           <label class="col-lg-11" :for="`user-${index}`">
-            <item-box :icon="user.avatar" :name="user.username"></item-box>
+            <item-box :icon="user.avatar" :name="user.name"></item-box>
           </label>
         </div>
     </div>
@@ -24,7 +24,7 @@
       <button @click.prevent="newGroup" class="btn btn-success">create</button>
     </div>
     <div class="row form-line">
-      <button @click.prevent="close" class="btn btn-danger">close</button>
+      <button @click.prevent="done" class="btn btn-danger">close</button>
     </div>
   </form>
 </template>
@@ -65,7 +65,6 @@ export default {
         gid: this.gid,
         members: this.selectedUsers
       }
-      console.log(data)
       const res = await axios.post("/index.php?action=new-group", data)
       if (res.data.code == 0) {
         alert("创建成功！")

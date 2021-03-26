@@ -79,9 +79,6 @@ export default {
       this.buttonText == "login" ? this.login() : this.register()
     }
   },
-  mounted() {
-    console.log(this.buttonText)
-  }
 }
 </script>
 

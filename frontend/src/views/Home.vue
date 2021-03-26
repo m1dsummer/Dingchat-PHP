@@ -26,7 +26,7 @@
         <item-box
           v-for="(group,index) in groups"
           :key="`group-${index}`"
-          :name="group.gid"
+          :name="group.name"
           :icon="group.icon"
           :gid="group.gid"
           v-on:changeGroup="changeGroup"
@@ -84,7 +84,7 @@ export default {
       const res = await axios.post("/index.php?action=get-groups", {user:this.userinfo.username})
       if (res.data.code == 0) {
         this.groups = res.data.data
-        this.curGroup = this.groups[0].gid
+        this.curGroup = this.groups[0].name
       }
     },
     async changeGroup(gid) {

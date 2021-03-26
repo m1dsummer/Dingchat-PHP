@@ -1,5 +1,5 @@
 <?php
-require_once("include/user.php");
+require_once("./include/user.php");
 
 session_start();
 

@@ -19,6 +19,11 @@ services:
       - ../backend:/var/www/html
     networks:
       - chatroom
+  composer:
+    image: composer:latest
+    volumes:
+      - ../backend:/app
+    command: /bin/bash -c "composer install && vendor/bin/doctrine orm:schema-tool:create"
   mysql:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
