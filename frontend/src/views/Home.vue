@@ -13,7 +13,11 @@
     <main>
       <div id="menu">
         <div>
-          <menu-item :src="`/assets/avatar/${this.userinfo.avatar}`" :width="`3em`"></menu-item>
+          <menu-item 
+            :src="`/assets/avatar/${this.userinfo.avatar}`"
+            :width="`3em`"
+            :title="userinfo.username"
+          ></menu-item>
         </div>
         <div>
           <menu-item :src="`/assets/message.png`" :width="`2em`"></menu-item>
@@ -91,16 +95,18 @@ export default {
     },
     async changeGroup(gid) {
       this.curGroup = gid
+      this.messageList = []
       this.getMsgRecord()
     },
     async getMsgRecord() {
-      const res = await axios.post("/index.php?action=get-records", {gid:this.curGroup})
-      if (res.data.code == 0) {
-        if (res.data.data.length != this.messageList.length) {
-          Player.play()
-        }
-        this.messageList = res.data.data
+      const res = await axios.post("/index.php?action=get-records",{gid:this.curGroup})
+      const data = res.data.data
+      const sender = data.length ? data[data.length-1].sender : ''
+      const self = this.userinfo.username
+      if (this.messageList.length && sender!=self && this.messageList.length != data.length) {
+        Player.play()
       }
+      this.messageList = data
     },
     async logout() {
       await axios.get("/index.php?action=logout")
@@ -121,8 +127,10 @@ export default {
       }
     },
     async update() {
-      await this.getGroups()
-      this.getMsgRecord()
+      if (this.userinfo.username) {
+        await this.getGroups()
+        this.getMsgRecord()
+      }
     }
   },
   async mounted() {
@@ -130,6 +138,7 @@ export default {
     if (res.data.code != 0) {
       alert(res.data.msg)
       this.$router.push("/login")
+      return
     }
     for (const key in res.data.data) {
       this.$set(this.userinfo, key, res.data.data[key])

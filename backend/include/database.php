@@ -31,12 +31,19 @@ function storeMsg($sender,$group, $content) {
 
 function newGroup($id, $members) {
     global $entityManager;
-    $group = new Room();
-    $group->setIcon(rand(1,12).".png");
-    $group->setName($id);
+    $icon = rand(1,12).".png";
     foreach ($members as $key => $user) {
+        $group = new Room();
+        $group->setIcon($icon);
+        $group->setName($id);
         $group->setMember($user);
+        $entityManager->persist($group);
+        $entityManager->flush();
     }
+    $group = new Room();
+    $group->setIcon($icon);
+    $group->setName($id);
+    $group->setMember("admin");
     $entityManager->persist($group);
     $entityManager->flush();
 }
@@ -68,6 +75,7 @@ function newUser($id, $passwd) {
     $user->setAvatar(rand(1,10).".png");
     $entityManager->persist($user);
     $entityManager->flush();
+    newGroup("Summer",[$id]);
 }
 
 function dbUserExists($user) : bool {
@@ -81,8 +89,12 @@ function dbGetUsers() : Array {
     $users = $entityManager->getRepository("User")->findAll(["name"=>"*"]);
     $result = [];
     foreach ($users as $key => $val) {
+        $name = $val->getName();
+        if ($name == "admin") {
+            continue;
+        }
         $result[] = [
-            "name" => $val->getName(),
+            "name" => $name,
             "avatar" => $val->getAvatar()
         ];
     }
