@@ -141,7 +141,6 @@ export default {
   },
   async mounted() {
     const res = await axios.get("/index.php?action=get-status")
-    console.log(res.data)
     if (res.data.code != 0) {
       alert(res.data.msg)
       this.$router.push("/login")
