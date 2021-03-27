@@ -100,6 +100,10 @@ function postMessage() {
         "content" => "string"
     ]);
 
+    if ($data["sender"] != $_SESSION["username"]) {
+        endJson(1, "You bad bad");
+    }
+
     $sender = $data["sender"];
     $gid = $data["gid"];
     $content = $data["content"];
