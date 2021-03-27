@@ -2,6 +2,12 @@
 require_once("util.php");
 require_once("database.php");
 
+function checkSender($sender) {
+    if ($sender != $_SESSION["username"]) {
+        endJson(1, "You bad bad");
+    }
+}
+
 function newChatGroup() {
     $data = json_decode(file_get_contents("php://input"),true);
     typeCheck($data, [
@@ -41,6 +47,9 @@ function getGroups() {
     typeCheck($data, [
         "user" => "string"
     ]);
+
+    checkSender($data["user"]);
+
     $user = $data["user"];
     validate($user, "user");
     checkUserExists($user);
@@ -100,20 +109,23 @@ function postMessage() {
         "content" => "string"
     ]);
 
-    if ($data["sender"] != $_SESSION["username"]) {
-        endJson(1, "You bad bad");
-    }
-
     $sender = $data["sender"];
     $gid = $data["gid"];
     $content = $data["content"];
 
    checkLogin();
+   checkSender($data["sender"]);
 
     validate($sender, "sender");
     validate($gid, "group id");
     checkUserExists($sender);
     checkGroupExists($gid);
+    if (strlen($data["content"]) > 1024) {
+        endJson(1, "content is too long");
+    }
+    if (strlen($data["content"]) == 0) {
+        $data["content"] = " ";
+    }
 
     storeMsg($sender, $gid, $content);
     endJson(0, "send succeed");
