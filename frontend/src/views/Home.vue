@@ -25,6 +25,9 @@
         <div @click="showDialog=true">
           <menu-item :src="`/assets/add.png`" :width="`2em`"></menu-item>
         </div>
+        <div @click="logout">
+          <menu-item :src="`/assets/logout.png`" :width="`2em`"></menu-item>
+        </div>
       </div>
       <div id="groups">
         <item-box
@@ -135,6 +138,7 @@ export default {
   },
   async mounted() {
     const res = await axios.get("/index.php?action=get-status")
+    console.log(res.data)
     if (res.data.code != 0) {
       alert(res.data.msg)
       this.$router.push("/login")
