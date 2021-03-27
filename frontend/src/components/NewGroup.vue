@@ -1,10 +1,10 @@
 <template>
   <form class="container dialog">
-    <p>创建新聊天室</p>
+    <h2>New Chatroom</h2>
     <div class="row form-line">
       <input v-model="gid" type="text" placeholder="Group name" class="form-control">
     </div>
-    <p>选择群聊成员（记得选择自己！）：</p>
+    <p>Select group members:（inlcude yourself）：</p>
     <div class="row form-line users">
       <div 
         class="row col-lg-6"
@@ -83,6 +83,7 @@ export default {
 </script>
 
 <style scoped>
+
 .dialog {
   position: absolute;
   z-index: 1;
@@ -99,7 +100,7 @@ export default {
   border-radius: 14px;
 }
 .dialog > * {
-  margin: 5px 0;
+  margin: 10px 0;
 }
 .form-line {
   width: 80%;

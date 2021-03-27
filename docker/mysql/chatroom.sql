@@ -27,4 +27,4 @@ CREATE table chatroom.rooms (
 INSERT INTO chatroom.user (name,password,avatar) VALUES ("admin","zxcasdqwe","1.png");
 
 -- 创建默认聊天室
-INSERT INTO chatroom.rooms (name,member,icon) VALUES ("Summer","Summer","1.png");
+INSERT INTO chatroom.rooms (name,member,icon) VALUES ("Summer","admin","1.png");

@@ -1,8 +1,8 @@
 <template>
   <div class="msg-box">
     <div id="page-switch">
-      <router-link to="/register" v-bind:class="{emphasis:isRegisterPage}">register</router-link>
-      <router-link to="/login" v-bind:class="{emphasis:!isRegisterPage}">login</router-link>
+      <router-link to="/register" v-bind:class="{emphasis:isRegisterPage}">SIGNUP</router-link>
+      <router-link to="/login" v-bind:class="{emphasis:!isRegisterPage}">SIGNIN</router-link>
     </div>
     <div id="img-container">
       <div id="img-wrapper">
@@ -16,14 +16,14 @@
       <div class="form-line">
         <input v-model="password" type="password" placeholder="password">
       </div>
-      <div v-show="isRegisterPage" class="form-line">
+      <div v-if="isRegisterPage" class="form-line">
         <input v-model="password2"
-               v-bind:class="{'red-border':!passwdMatch}"
-               type="password"
-               placeholder="password again">
+              v-bind:class="{'red-border':!passwdMatch}"
+              type="password"
+              placeholder="confirm password">
       </div>
       <div class="form-line">
-        <button @click.prevent="handler" id="login" class="btn btn-success">login</button>
+        <button @click.prevent="handler" id="login" class="btn btn-success">SIGNIN</button>
       </div>
     </form>
   </div> 
@@ -77,12 +77,15 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300&display=swap');
+
 .msg-box {
   margin: 20% auto;
-  width: 35%;
-  padding: 4em 2em;
-  border-radius: 6px;
+  width: 30%;
+  padding: 2em 0;
   background-color: #ddd;
+  font-family: 'Cairo', sans-serif;
+  transition: all .8s linear;
 }
 #page-switch {
   display: grid;
@@ -102,7 +105,8 @@ export default {
 #img-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 3em;
+  align-items: center;
+  margin: auto;
 }
 #img-wrapper {
   margin: 10px;
@@ -110,6 +114,7 @@ export default {
   height: 100px;
   border-radius: 50%;
   border: 4px solid #eee; 
+  background: #eee;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -118,7 +123,8 @@ export default {
 .form-line {
   display: flex;
   justify-content: center;
-  margin: 1em 4em;
+  margin: 1em auto;
+  width: 70%;
 }
 .form-line > * {
   width: 100%;

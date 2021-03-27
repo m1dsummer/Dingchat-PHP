@@ -116,11 +116,10 @@ function postMessage() {
 }
 
 function getStatus() {
-    $user = $_SESSION["username"];
-    if ($user) {
+    if (isset($_SESSION["username"])) {
         endJson(0, "ok", [
-            "username" => $user,
-            "avatar" => dbGetAvatar($user)
+            "username" => $_SESSION["username"],
+            "avatar" => dbGetAvatar($_SESSION["username"])
         ]);
     } else {
         endJson(1, "not logined");

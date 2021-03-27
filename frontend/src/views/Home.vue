@@ -116,6 +116,9 @@ export default {
       location.reload()
     },
     async postMessage() {
+      if (!this.message) {
+        return
+      }
       const data = {
         sender: this.userinfo.username,
         content: this.message,
@@ -153,6 +156,9 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400&display=swap');
+
 #chatroom {
   height: 600px;
   width: 1000px;
@@ -170,16 +176,19 @@ header {
   display: grid;
   grid-template-columns: 2fr 1fr;
   align-items: center;
+  font-family: 'Prompt', sans-serif;
 }
 header  h1 {
   padding-left: 1em;
   color: rgba(255,255,255,.8);
   font-size: xx-large;
+  margin: 0;
 }
 main {
   flex-basis: 87.5%;
   flex-grow: 0;
   position: relative;
+  font-family: 'M PLUS 1p', sans-serif;
 }
 main > * {
   height: 100%;

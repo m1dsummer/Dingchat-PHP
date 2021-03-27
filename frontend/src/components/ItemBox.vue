@@ -53,6 +53,7 @@ p {
   margin: 0;
   width: 100%;
   text-align: left;
+  font-weight: bold;
 }
 .wrapper {
   display: flex;
