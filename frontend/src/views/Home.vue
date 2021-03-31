@@ -64,7 +64,11 @@
             </div>
           </div>
           <div id="text-field">
-            <textarea v-model="message"></textarea>
+            <textarea
+              v-model="message"
+              v-on:keyup.enter.ctrl="sendMessage"
+              placeholder="press Ctrl+Enter to send message"
+            ></textarea>
             <button @click="sendMessage">send</button>
           </div>
         </div>
@@ -269,10 +273,14 @@ main > * {
   width: 100%;
   position: absolute;
   bottom: 0;
-  border-top: 1px solid #aaa;
+  border-top: 1px solid #eee;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 .controller-contanier {
   display: flex;
+  height: 24px;
 }
 .controller-contanier  label {
   width: 24px;
@@ -299,6 +307,7 @@ input[type="file"] {
   background-image: url("/assets/file.png");
 }
 #text-field {
+  flex-grow: 1;
   display: grid;
   grid-template-columns: 8fr 1fr;
 }
@@ -309,8 +318,8 @@ input[type="file"] {
 }
 #text-field > button {
   color: #75c2ff;
-  background-color: #fff;
   border: none;
+  background: inherit;
 }
 .cur-group {
   background-color: #D5EDFE;
