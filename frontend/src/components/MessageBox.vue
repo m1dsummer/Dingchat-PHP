@@ -8,7 +8,9 @@
         <p :class="{'self-id':self}">{{name}}</p>
       </div>
       <div class="content-wrapper" :class="{self}">
-        <p>{{content}}</p>
+        <message-image v-if="type=='image'" :src="content"></message-image>
+        <message-file v-else-if="type=='file'" :file="content"></message-file>
+        <message-text v-else :text="content"></message-text>
       </div>
     </div>
     <div class="blank-wrapper"></div>
@@ -16,6 +18,10 @@
 </template>
 
 <script>
+import MessageFile from "@/components/MessageFile"
+import MessageText from "@/components/MessageText"
+import MessageImage from "@/components/MessageImage"
+
 export default {
   name: "MessageBox",
   props: {
@@ -23,6 +29,12 @@ export default {
     name: { type: String, required: true },
     content: { type: String, required: true },
     self: { type: Boolean, default: false},
+    type: { type: String, default: "text"}
+  },
+  components: {
+    MessageFile,
+    MessageText,
+    MessageImage
   }
 }
 </script>
@@ -54,7 +66,7 @@ export default {
 p {
   margin: 0;
 }
-.content-wrapper > p {
+.content-wrapper {
   padding: .2em 1em .2em 1em;
   width: fit-content;
   border-radius: 6px;

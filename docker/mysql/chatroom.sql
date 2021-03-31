@@ -12,7 +12,8 @@ CREATE table chatroom.records (
     mid int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     sender char(16) NOT NULL,
     group_name char(16) NOT NULL,
-    content varchar(16) NOT NULL,
+    content varchar(1024) NOT NULL,
+    type char(16) NOT NULL,
     time TIMESTAMP DEFAULT NOW()
 );
 

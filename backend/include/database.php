@@ -13,20 +13,42 @@ function getMsgRecord($group) : Array {
             "sender" => $sender,
             "time" => $record->getTime(),
             "room" => $record->getGroup(),
+            "type" => $record->getType(),
             "avatar" => $avatar
         ];
     }
     return $result;
 }
 
-function storeMsg($sender,$group, $content) {
+function storeMsg($data) {
     global $entityManager;
     $record = new Record();
-    $record->setSender($sender);
-    $record->setGroup($group);
-    $record->setContent($content);
+    $record->setSender($data["sender"]);
+    $record->setGroup($data["gid"]);
+    $record->setContent($data["content"]);
+    $record->setType($data["type"]);
     $entityManager->persist($record);
     $entityManager->flush();
+    return $record;
+}
+
+function storeFile($data) {
+    global $entityManager;
+
+    $content = $data["content"];
+    $record = new Record();
+    $record->setSender($data["sender"]);
+    $record->setGroup($data["gid"]);
+    $record->setType($data["type"]);
+    $record->setContent(" ");
+    $entityManager->persist($record);
+    $entityManager->flush();
+    $obj = "SummerChatMsg_".$record->getMid()."_".$data["filename"];
+    $record->setContent($obj);
+    $entityManager->persist($record);
+    $entityManager->flush();
+    uploadToOSS($obj, $content);
+    return $record;
 }
 
 function newGroup($id, $members) {

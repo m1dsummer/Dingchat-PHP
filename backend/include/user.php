@@ -1,6 +1,7 @@
 <?php
 require_once("util.php");
 require_once("database.php");
+require_once("oss.php");
 
 function checkSender($sender) {
     if ($sender != $_SESSION["username"]) {
@@ -101,33 +102,53 @@ function userLogout() {
     endJson(0, "logout");
 }
 
-function postMessage() {
-    $data = json_decode(file_get_contents("php://input"), true);
-    typeCheck($data, [
-        "sender" => "string",
-        "gid" => "string",
-        "content" => "string"
-    ]);
-
-    $sender = $data["sender"];
-    $gid = $data["gid"];
-    $content = $data["content"];
-
-   checkLogin();
-   checkSender($data["sender"]);
-
-    validate($sender, "sender");
-    validate($gid, "group id");
-    checkUserExists($sender);
-    checkGroupExists($gid);
+function storeMessageText($data) {
     if (strlen($data["content"]) > 1024) {
         endJson(1, "content is too long");
     }
     if (strlen($data["content"]) == 0) {
         $data["content"] = " ";
     }
+    storeMsg($data);
+}
 
-    storeMsg($sender, $gid, $content);
+function storeMessageFile($data) {
+    storeFile($data);
+}
+
+function postMessage() {
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    typeCheck($data, [
+        "sender" => "string",
+        "gid" => "string",
+        "content" => "string",
+        "type" => "string"
+    ]);
+
+    $sender = $data["sender"];
+    $gid = $data["gid"];
+    $content = $data["content"];
+    $type = $data["type"];
+
+   checkLogin();
+   validate($sender, "sender");
+   checkSender($sender);
+   validate($gid, "group id");
+   checkUserExists($sender);
+   checkGroupExists($gid);
+    
+   if ($type == "text") {
+       storeMessageText($data);
+   } else if ($type=="image"||$type=="file") {
+       typeCheck($data, [
+           "filename" => "string"
+       ]);
+       storeMessageFile($data);
+   } else {
+       endJson(1, "invalid message type");
+   }
+    
     endJson(0, "send succeed");
 }
 

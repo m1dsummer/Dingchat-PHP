@@ -48,12 +48,25 @@
             :icon="`/assets/avatar/${msg.avatar}`"
             :name="msg.sender"
             :content="msg.content"
+            :type="msg.type"
             :self="msg.sender==userinfo.username"
           ></message-box>
         </div>
         <div id="input-area">
-          <textarea v-model="message"></textarea>
-          <button @click="postMessage">send</button>
+          <div class="controller-contanier">
+            <div class="controller">
+              <label id="img-label" for="image-selector" title="send pictures"></label>
+              <input @change="sendImage" id="image-selector" accept="image/*" type="file">
+            </div>
+            <div class="controller">
+              <label id="file-label" for="file-selector" title="send files"></label>
+              <input @change="sendFile" id="file-selector" type="file">
+            </div>
+          </div>
+          <div id="text-field">
+            <textarea v-model="message"></textarea>
+            <button @click="sendMessage">send</button>
+          </div>
         </div>
       </div>
     </main>
@@ -67,6 +80,7 @@ import ItemBox from "@/components/ItemBox.vue"
 import NewGroup from "@/components/NewGroup.vue"
 import MessageBox from "@/components/MessageBox"
 import Player from "@/js/player"
+import Reader from "@/js/reader"
 
 export default {
   name: "Home",
@@ -115,15 +129,7 @@ export default {
       await axios.get("/index.php?action=logout")
       location.reload()
     },
-    async postMessage() {
-      if (!this.message) {
-        return
-      }
-      const data = {
-        sender: this.userinfo.username,
-        content: this.message,
-        gid: this.curGroup
-      }
+    async postMessage(data) {
       const res = await axios.post("/index.php?action=post-message", data);
       if (res.data.code == 1) {
         alert(`failed to send message\n${res.data.msg}`)
@@ -137,6 +143,42 @@ export default {
         await this.getGroups()
         this.getMsgRecord()
       }
+    },
+    async sendMessage() {
+      if (!this.message) {
+        return
+      }
+      const data = {
+        sender: this.userinfo.username,
+        content: this.message,
+        gid: this.curGroup,
+        type: "text"
+      }
+      this.postMessage(data)
+    },
+    async sendImage(e) {
+      const file = e.target.files[0]
+      const content = await Reader.readFile(file)
+      const data = {
+        sender: this.userinfo.username,
+        content: btoa(content),
+        filename: file.name,
+        gid: this.curGroup,
+        type: "image",
+      }
+      this.postMessage(data)
+    },
+    async sendFile(e) {
+      const file = e.target.files[0]
+      const content = await Reader.readFile(file)
+      const data = {
+        sender: this.userinfo.username,
+        content: btoa(content),
+        filename: file.name,
+        gid: this.curGroup,
+        type: "file",
+      }
+      this.postMessage(data)
     }
   },
   async mounted() {
@@ -227,17 +269,45 @@ main > * {
   width: 100%;
   position: absolute;
   bottom: 0;
-  background: #333;
-  display: grid;
-  grid-template-columns: 8fr 1fr;
   border-top: 1px solid #aaa;
 }
-#input-area > textarea {
+.controller-contanier {
+  display: flex;
+}
+.controller-contanier  label {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+input[type="file"] {
+  text-decoration: none;
+  opacity: 0;
+  display: none;
+}
+.controller {
+  height: fit-content;
+  padding: 0 4px;
+}
+.controller > label {
+  background-size: contain;
+  background-position: center;
+}
+#img-label {
+  background-image: url("/assets/image.png");
+}
+#file-label {
+  background-image: url("/assets/file.png");
+}
+#text-field {
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+}
+#text-field > textarea {
   outline: none;
   resize: none;
   border: none;
 }
-#input-area > button {
+#text-field > button {
   color: #75c2ff;
   background-color: #fff;
   border: none;
