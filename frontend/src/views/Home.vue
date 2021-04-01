@@ -1,5 +1,5 @@
 <template>
-  <div id="chatroom">
+  <div id="chatroom" class="container">
     <new-group
       :curuser="userinfo.username"
       v-on:close="showDialog=false"
@@ -10,8 +10,8 @@
       <div><h1>SummerChat</h1></div>
       <div></div>
     </header>
-    <main>
-      <div id="menu">
+    <main class="row m-0">
+      <div id="menu" class="col-sm-1 p-0">
         <div>
           <menu-item 
             :src="`/assets/avatar/${this.userinfo.avatar}`"
@@ -29,7 +29,7 @@
           <menu-item :src="`/assets/logout.png`" :width="`2em`"></menu-item>
         </div>
       </div>
-      <div id="groups">
+      <div id="groups" class="col-sm-3 p-0">
         <item-box
           v-for="(group,index) in groups"
           :key="`group-${index}`"
@@ -40,7 +40,7 @@
           v-on:changeGroup="changeGroup"
         >{{group}}</item-box>
       </div>
-      <div id="window">
+      <div id="window" class="col-sm-8 p-0">
         <div id="msg-list">
           <message-box
             v-for="(msg, index) in messageList"
@@ -205,10 +205,10 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400&display=swap');
 
 #chatroom {
-  height: 600px;
-  width: 1000px;
   margin: 0 auto;
   padding: 0;
+  width: 60%;
+  height: 80%;
   border-radius: 6px;
   border: 1px solid #000;
   display: flex;
@@ -231,32 +231,20 @@ header  h1 {
 }
 main {
   flex-basis: 87.5%;
-  flex-grow: 0;
   position: relative;
   font-family: 'M PLUS 1p', sans-serif;
-}
-main > * {
-  height: 100%;
-  position: absolute;
 }
 #menu, .menu-item {
   display: flex;
   flex-direction: column;
   background-color: #e5e8f5;
 }
-#menu {
-  width: 8%;
-}
 #groups {
-  width: 22%;
-  left: 8%;
   background-color: #f8faff;
   border-right: 1px solid #aaa;
-  overflow-y: scroll;
+  overflow-y: overlay;
 }
 #window {
-  width: 70%;
-  left: 30%;
   background-color: #f8faff;
   position: relative;
 }
@@ -282,7 +270,7 @@ main > * {
   display: flex;
   height: 24px;
 }
-.controller-contanier  label {
+.controller-contanier label {
   width: 24px;
   height: 24px;
   cursor: pointer;
@@ -308,8 +296,10 @@ input[type="file"] {
 }
 #text-field {
   flex-grow: 1;
+  flex-shrink: 1;
   display: grid;
   grid-template-columns: 8fr 1fr;
+  height: calc(100% - 24px);
 }
 #text-field > textarea {
   outline: none;

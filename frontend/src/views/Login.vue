@@ -1,32 +1,36 @@
 <template>
-  <div class="msg-box">
-    <div id="page-switch">
-      <router-link to="/register" v-bind:class="{emphasis:isRegisterPage}">SIGNUP</router-link>
-      <router-link to="/login" v-bind:class="{emphasis:!isRegisterPage}">SIGNIN</router-link>
-    </div>
-    <div id="img-container">
-      <div id="img-wrapper">
-        <img src="/assets/logo.png" alt="logo" width="64px">
+  <div class="container-sm">
+    <div class="row justify-content-center">
+      <div class="msg-box col-sm-12 col-md-4">
+        <div id="page-switch">
+          <router-link to="/register" v-bind:class="{emphasis:isRegisterPage}">SIGNUP</router-link>
+          <router-link to="/login" v-bind:class="{emphasis:!isRegisterPage}">SIGNIN</router-link>
+        </div>
+        <div id="img-container">
+          <div id="img-wrapper">
+            <img src="/assets/logo.png" alt="logo" width="64px">
+          </div>
+        </div>
+        <form>
+          <div class="form-line">
+            <input v-model="username" type="text" placeholder="username">
+          </div>
+          <div class="form-line">
+            <input v-model="password" type="password" placeholder="password">
+          </div>
+          <div v-if="isRegisterPage" class="form-line">
+            <input v-model="password2"
+                  v-bind:class="{'red-border':!passwdMatch}"
+                  type="password"
+                  placeholder="confirm password">
+          </div>
+          <div class="form-line">
+            <button @click.prevent="handler" id="login" class="btn btn-success">SIGNIN</button>
+          </div>
+        </form>
       </div>
     </div>
-    <form>
-      <div class="form-line">
-        <input v-model="username" type="text" placeholder="username">
-      </div>
-      <div class="form-line">
-        <input v-model="password" type="password" placeholder="password">
-      </div>
-      <div v-if="isRegisterPage" class="form-line">
-        <input v-model="password2"
-              v-bind:class="{'red-border':!passwdMatch}"
-              type="password"
-              placeholder="confirm password">
-      </div>
-      <div class="form-line">
-        <button @click.prevent="handler" id="login" class="btn btn-success">SIGNIN</button>
-      </div>
-    </form>
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -80,8 +84,6 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300&display=swap');
 
 .msg-box {
-  margin: 20% auto;
-  width: 30%;
   padding: 2em 0;
   background-color: #ddd;
   font-family: 'Cairo', sans-serif;
