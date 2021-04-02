@@ -8,7 +8,7 @@
         </div>
         <div id="img-container">
           <div id="img-wrapper">
-            <img src="/assets/logo.png" alt="logo" width="64px">
+            <img src="/assets/logo.png" alt="logo" width="100px">
           </div>
         </div>
         <form>
@@ -111,12 +111,9 @@ export default {
   margin: auto;
 }
 #img-wrapper {
-  margin: 10px;
+  margin: 10px 0 20px 0;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
-  border: 4px solid #eee; 
-  background: #eee;
   display: flex;
   flex-direction: column;
   justify-content: center;

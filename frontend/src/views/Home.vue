@@ -15,7 +15,7 @@
         <div>
           <menu-item 
             :src="`/assets/avatar/${this.userinfo.avatar}`"
-            :width="`3em`"
+            :width="`2.5em`"
             :title="userinfo.username"
           ></menu-item>
         </div>

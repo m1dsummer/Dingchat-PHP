@@ -65,9 +65,6 @@ p {
   padding-left: .8em;
 }
 img {
-  background: #fff;
-  border-radius: 50%;
-  padding: 10px;
   box-sizing: padding-box;
   cursor: pointer;
 }
