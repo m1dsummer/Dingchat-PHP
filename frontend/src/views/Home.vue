@@ -207,10 +207,8 @@ export default {
 #chatroom {
   margin: 0 auto;
   padding: 0;
-  width: 60%;
+  width: 70%;
   height: 80%;
-  border-radius: 6px;
-  border: 1px solid #000;
   display: flex;
   flex-direction: column;
 }
