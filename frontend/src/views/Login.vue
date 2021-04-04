@@ -25,7 +25,7 @@
                   placeholder="confirm password">
           </div>
           <div class="form-line">
-            <button @click.prevent="handler" id="login" class="btn btn-success">SIGNIN</button>
+            <button @click.prevent="handler" id="login" class="btn btn-success">{{buttonText}}</button>
           </div>
         </form>
       </div>
@@ -51,6 +51,9 @@ export default {
     },
     passwdMatch() {
       return this.password2 != "" && (this.password == this.password2)
+    },
+    buttonText() {
+      return this.isRegisterPage ? "SIGNUP" : "SIGNIN"
     }
   },
   methods: {
